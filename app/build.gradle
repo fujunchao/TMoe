@@ -26,7 +26,7 @@ android {
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
         }
 
-        resConfigs 'en', 'zh-rCN', 'zh-rTW'
+        resConfigs 'en', 'zh-rCN', 'zh-rTW', 'ru', 'es'
 
         externalNativeBuild {
             cmake {
@@ -75,6 +75,24 @@ android {
 
     buildFeatures {
         viewBinding true
+    }
+
+    if (System.getenv("KEYSTORE_PATH") != null) {
+        signingConfigs {
+            release {
+                storeFile file(System.getenv("KEYSTORE_PATH"))
+                storePassword System.getenv("KEYSTORE_PASSWORD")
+                keyAlias System.getenv("KEY_ALIAS")
+                keyPassword System.getenv("KEY_PASSWORD")
+                enableV2Signing = true
+                enableV3Signing = true
+            }
+        }
+        buildTypes {
+            release {
+                signingConfig signingConfigs.release
+            }
+        }
     }
 }
 
